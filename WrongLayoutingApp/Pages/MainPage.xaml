@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:views="clr-namespace:WrongLayoutingApp.Pages.Views"
+             xmlns:viewModels="clr-namespace:WrongLayoutingApp.ViewModels"
+             xmlns:tabs="http://sharpnado.com"
+             x:DataType="viewModels:MainPageViewModel"
+             x:Class="WrongLayoutingApp.Pages.MainPage"
+             Title="Main Page">
+
+
+    <!-- Style for BottomTabs -->
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style x:Key="BottomTab" TargetType="tabs:BottomTabItem">
+                <Setter Property="SelectedTabColor" Value="{StaticResource DarkOrange1}" />
+                <Setter Property="FontFamily" Value="OpenSansExtraBold" />
+                <Setter Property="UnselectedLabelColor" Value="{StaticResource Black}" />
+                <Setter Property="UnselectedIconColor" Value="{StaticResource Black}" />
+                <Setter Property="IconSize" Value="24" />
+                <Setter Property="LabelSize" Value="14" />
+            </Style>
+        </ResourceDictionary>
+        <viewModels:View1ViewModel x:Key="View1ViewModel" />
+    </ContentPage.Resources>
+
+
+    <Grid IgnoreSafeArea="True">
+        <Grid x:Name="MainPageViewGrid" RowDefinitions="*, 55">
+
+            <!-- Switcher to switch between the different Views -->
+            <tabs:ViewSwitcher x:Name="ContentViewSwitcher"
+                               Grid.Row="0"
+                               Animate="True"
+                               SelectedIndex="{Binding SelectedViewModelIndex, Mode=TwoWay}">
+
+                <tabs:DelayedView x:TypeArguments="views:View1"
+                                  BindingContext="{Binding Source={StaticResource View1ViewModel}}"
+                                  AccentColor="{StaticResource Gray100}"
+                                  Animate="True"                              
+                                  UseActivityIndicator="True" />
+
+                <tabs:DelayedView x:TypeArguments="views:View2"
+                                  BindingContext="{Binding Source={viewModels:View2ViewModel}}"
+                                  AccentColor="{StaticResource Gray100}"
+                                  Animate="True"
+                                  UseActivityIndicator="True" />
+
+            </tabs:ViewSwitcher>
+                
+
+            <!-- Bottom-Tabs -->
+            <tabs:TabHostView Grid.Row="1"
+                              BackgroundColor="White"
+                              Orientation="Horizontal"
+                              TabType="Fixed"
+                              SelectedIndex="{Binding Source={x:Reference ContentViewSwitcher}, Path=SelectedIndex, Mode=TwoWay}">
+
+                <tabs:TabHostView.Tabs>
+                    
+                    <!-- Tab: View 1 -->
+                    <tabs:BottomTabItem Style="{StaticResource BottomTab}"
+                                        IconImageSource="dotnet_bot.png"
+                                        Label="View 1"
+                                        Margin="5, 0, 0, 0"/>
+
+                    <!-- Tab: View 2 -->
+                    <tabs:BottomTabItem Style="{StaticResource BottomTab}"
+                                        IconImageSource="dotnet_bot.png"
+                                        Label="View 2" />
+
+                </tabs:TabHostView.Tabs>
+            </tabs:TabHostView>
+        </Grid>
+        
+    </Grid>
+    
+
+</ContentPage>
